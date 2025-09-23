@@ -4,18 +4,30 @@ import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
+  DashboardOutlined,
+  ShopOutlined,
 } from "@ant-design/icons";
 import { Button, Layout, Menu, theme } from "antd";
+import { useRouter } from "next/navigation";
 
 const { Header, Sider, Content } = Layout;
 
 export default function Sidemenu({ children }: { children: ReactNode }) {
+  const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+
+  const handleMenuBarFun = ({ key }: { key: string }) => {
+    if (key === "1") {
+      router.push("/Dashboard");
+    } else if (key === "2") {
+      router.push("/shop");
+    } else {
+      router.push("/categories");
+    }
+  };
   return (
     <>
       <Layout style={{ minHeight: "100vh" }}>
@@ -25,21 +37,24 @@ export default function Sidemenu({ children }: { children: ReactNode }) {
             theme="dark"
             mode="inline"
             defaultSelectedKeys={["1"]}
+            onClick={(info) => {
+              handleMenuBarFun(info);
+            }}
             items={[
               {
                 key: "1",
-                icon: <UserOutlined />,
+                icon: <DashboardOutlined />,
                 label: "Dashboard",
               },
               {
                 key: "2",
-                icon: <VideoCameraOutlined />,
+                icon: <ShopOutlined />,
                 label: "Shop",
               },
               {
                 key: "3",
                 icon: <UploadOutlined />,
-                label: "Categeries",
+                label: "Categories",
               },
             ]}
           />
