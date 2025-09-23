@@ -2,9 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
-import { ReactQueryProvider } from "./components/Providers/reactquery.provider";
-import "@ant-design/compatible";
-
+import Sidemenu from "./components/Sidemenu";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -31,7 +29,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <AntdRegistry>
-          <ReactQueryProvider>{children}</ReactQueryProvider>
+          <Sidemenu>{children}</Sidemenu>
         </AntdRegistry>
       </body>
     </html>
