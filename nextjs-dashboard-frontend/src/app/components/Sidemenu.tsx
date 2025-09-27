@@ -7,8 +7,10 @@ import {
   DashboardOutlined,
   ShopOutlined,
 } from "@ant-design/icons";
-import { Button, Layout, Menu, theme } from "antd";
+import { Button, Layout, Menu, theme, Col, Row, Modal } from "antd";
 import { useRouter } from "next/navigation";
+import GreetingContent from "./GreetingContent";
+import { CircleUserRound,LayoutGrid } from "lucide-react";
 
 const { Header, Sider, Content } = Layout;
 
@@ -21,11 +23,11 @@ export default function Sidemenu({ children }: { children: ReactNode }) {
 
   const handleMenuBarFun = ({ key }: { key: string }) => {
     if (key === "1") {
-      router.push("/Dashboard");
-    } else if (key === "2") {
-      router.push("/shop");
+      router.push("/pages/dashboard");
+    } else if (key === "5") {
+      router.push("/pages/shop");
     } else {
-      router.push("/categories");
+      router.push("/pages/categories");
     }
   };
   return (
@@ -46,31 +48,50 @@ export default function Sidemenu({ children }: { children: ReactNode }) {
                 icon: <DashboardOutlined />,
                 label: "Dashboard",
               },
-              {
-                key: "2",
-                icon: <ShopOutlined />,
-                label: "Shop",
-              },
+              // {
+              //   key: "2",
+              //   icon: <ShopOutlined />,
+              //   label: "Shop",
+              // },
               {
                 key: "3",
                 icon: <UploadOutlined />,
-                label: "Categories",
+                label: "Products",
+                children: [
+                  { key: "5", icon: <ShopOutlined />, label: "Shop" },
+                  { key: "6", icon:<LayoutGrid className="w-[14px] h-[14px]" />, label: "Categories" },
+                ],
               },
             ]}
           />
         </Sider>
         <Layout>
           <Header style={{ padding: 0, background: colorBgContainer }}>
-            <Button
-              type="text"
-              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-              onClick={() => setCollapsed(!collapsed)}
-              style={{
-                fontSize: "16px",
-                width: 64,
-                height: 64,
-              }}
-            />
+            <Row>
+              <Col span={2}>
+                {" "}
+                <Button
+                  type="text"
+                  icon={
+                    collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />
+                  }
+                  onClick={() => setCollapsed(!collapsed)}
+                  style={{
+                    fontSize: "16px",
+                    width: 64,
+                    height: 64,
+                  }}
+                />
+              </Col>
+              <Col span={20}>
+                <GreetingContent />
+              </Col>
+              <Col span={2}>
+                <Row justify="center" align="middle" style={{ height: "100%" }}>
+                  <CircleUserRound />
+                </Row>
+              </Col>
+            </Row>
           </Header>
           <Content
             style={{

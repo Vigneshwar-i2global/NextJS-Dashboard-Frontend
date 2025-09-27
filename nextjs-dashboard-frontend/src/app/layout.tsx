@@ -29,7 +29,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <AntdRegistry>
-          <Sidemenu>{children}</Sidemenu>
+          {/* <Sidemenu> */}
+            {children}
+            {/* </Sidemenu> */}
         </AntdRegistry>
       </body>
     </html>
