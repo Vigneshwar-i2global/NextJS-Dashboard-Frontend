@@ -1,11 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Sun, Moon, Coffee, BedDouble } from "lucide-react"; // import more icons
+import { Sun, Moon, Coffee, BedDouble } from "lucide-react";
 
 const GreetingContent = ({ userName = "Vincent" }) => {
   const [greeting, setGreeting] = useState("");
-  const [Icon, setIcon] = useState(() => Sun); // default icon
+  const [Icon, setIcon] = useState(() => Sun);
 
   const updateGreeting = () => {
     const hour = new Date().getHours();
@@ -38,7 +38,16 @@ const GreetingContent = ({ userName = "Vincent" }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
     >
-      <Icon className="text-yellow-500 w-7 h-7" />
+      <motion.div
+        animate={{ x: [0, -4, 4, -4, 4, 0] }}
+        transition={{
+          duration: 0.6,
+          repeat: Infinity,
+          repeatDelay: 2,
+        }}
+      >
+        <Icon className="text-yellow-500 w-7 h-7" />
+      </motion.div>
       <span>
         {greeting}, {userName}!
       </span>
