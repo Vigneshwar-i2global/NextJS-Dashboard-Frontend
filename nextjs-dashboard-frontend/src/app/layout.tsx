@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
-import { ibm_plex_sans } from "./fonts/app.font";
+import { poppins } from "./fonts/app.font";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,11 +15,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${ibm_plex_sans.className} antialiased`}>
+      <body className={`${poppins.className} antialiased`}>
         <AntdRegistry>
-          {/* <Sidemenu> */}
             {children}
-            {/* </Sidemenu> */}
         </AntdRegistry>
       </body>
     </html>

@@ -10,11 +10,11 @@
 }
 
 * {
-  font-family: var(--font-ibm-plex-sans);
+  font-family: var(--font-poppins);
 }
 
 body {
-  font-family: var(--font-ibm-plex-sans);
+  font-family: var(--font-poppins);
 }
 
 .ant-typography,
@@ -27,7 +27,7 @@ body {
 .ant-input-number,
 .ant-time-picker,
 .ant-tree-select {
-  font-family: var(--font-ibm-plex-sans) !important;
+  font-family: var(--font-poppins) !important;
 }
 
 :root {
