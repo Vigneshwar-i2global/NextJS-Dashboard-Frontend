@@ -15,7 +15,7 @@ const GreetingContent = ({ userName = "Vincent" }) => {
       setIcon(() => Sun);
     } else if (hour < 18) {
       setGreeting("Good Afternoon");
-      setIcon(() => Coffee);
+      setIcon(() => Sun);
     } else if (hour < 21) {
       setGreeting("Good Evening");
       setIcon(() => Moon);
