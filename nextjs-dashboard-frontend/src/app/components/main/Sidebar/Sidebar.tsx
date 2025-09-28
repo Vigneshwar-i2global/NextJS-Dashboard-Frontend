@@ -7,9 +7,19 @@ import {
   DashboardOutlined,
   ShopOutlined,
 } from "@ant-design/icons";
-import { Button, Layout, Menu, theme, Col, Row, Modal } from "antd";
+import type { PopconfirmProps } from "antd";
+import {
+  Button,
+  Layout,
+  Menu,
+  theme,
+  Col,
+  Row,
+  Popconfirm,
+  message,
+} from "antd";
 import { useRouter } from "next/navigation";
-import { CircleUserRound,LayoutGrid } from "lucide-react";
+import { CircleUserRound, LayoutGrid } from "lucide-react";
 import GreetingContent from "../GreetingContent/GreetingContent";
 
 const { Header, Sider, Content } = Layout;
@@ -30,6 +40,13 @@ export default function Sidemenu({ children }: { children: ReactNode }) {
       router.push("/admin/categories");
     }
   };
+
+  const confirm: PopconfirmProps["onConfirm"] = (e) => {
+    router.push("/");
+  };
+
+  const cancel: PopconfirmProps["onCancel"] = (e) => {};
+
   return (
     <>
       <Layout style={{ minHeight: "100vh" }}>
@@ -59,7 +76,11 @@ export default function Sidemenu({ children }: { children: ReactNode }) {
                 label: "Products",
                 children: [
                   { key: "5", icon: <ShopOutlined />, label: "Shop" },
-                  { key: "6", icon:<LayoutGrid className="w-[14px] h-[14px]" />, label: "Categories" },
+                  {
+                    key: "6",
+                    icon: <LayoutGrid className="w-[14px] h-[14px]" />,
+                    label: "Categories",
+                  },
                 ],
               },
             ]}
@@ -84,11 +105,20 @@ export default function Sidemenu({ children }: { children: ReactNode }) {
                 />
               </Col>
               <Col span={20}>
-                <GreetingContent/>
+                <GreetingContent />
               </Col>
               <Col span={2}>
                 <Row justify="center" align="middle" style={{ height: "100%" }}>
-                  <CircleUserRound />
+                  <Popconfirm
+                    title="Logout"
+                    description="Do you really want to sign out of your account?"
+                    onConfirm={confirm}
+                    onCancel={cancel}
+                    okText="Yes"
+                    cancelText="No"
+                  >
+                    <CircleUserRound style={{ cursor: "pointer" }} />
+                  </Popconfirm>
                 </Row>
               </Col>
             </Row>
