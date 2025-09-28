@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
-import { ReactQueryProvider } from "./components/providers/reactquery.provider";
 import { ibm_plex_sans } from "./fonts/app.font";
 
 export const metadata: Metadata = {
@@ -18,7 +17,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${ibm_plex_sans.className} antialiased`}>
         <AntdRegistry>
-          <ReactQueryProvider>{children}</ReactQueryProvider>
+          {/* <Sidemenu> */}
+            {children}
+            {/* </Sidemenu> */}
         </AntdRegistry>
       </body>
     </html>
