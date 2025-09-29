@@ -3,34 +3,20 @@ import React, { useState, ReactNode } from "react";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  UploadOutlined,
-  DashboardOutlined,
-  ShopOutlined,
+  LogoutOutlined,
 } from "@ant-design/icons";
 import type { PopconfirmProps } from "antd";
-import {
-  Button,
-  Layout,
-  Menu,
-  theme,
-  Col,
-  Row,
-  Popconfirm,
-  message,
-} from "antd";
+import { Button, Layout, Menu, Col, Row, Avatar, Dropdown, Typography, Popconfirm } from "antd";
 import { useRouter } from "next/navigation";
-import { CircleUserRound, LayoutGrid } from "lucide-react";
+import { CircleUserRound, Package, Home } from "lucide-react";
 import GreetingContent from "../GreetingContent/GreetingContent";
 
 const { Header, Sider, Content } = Layout;
+const { Text } = Typography;
 
 export default function Sidemenu({ children }: { children: ReactNode }) {
   const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
-  const {
-    token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken();
-
   const handleMenuBarFun = ({ key }: { key: string }) => {
     if (key === "1") {
       router.push("/admin/dashboard");
@@ -46,12 +32,40 @@ export default function Sidemenu({ children }: { children: ReactNode }) {
   };
 
   const cancel: PopconfirmProps["onCancel"] = (e) => {};
+  const userMenuItems = [
+    {
+      key: 'logout',
+      icon: <LogoutOutlined />,
+      label: 'Logout',
+      danger: true,
+    },
+  ];
 
   return (
     <>
       <Layout style={{ minHeight: "100vh" }}>
-        <Sider trigger={null} collapsible collapsed={collapsed}>
-          <div className="demo-logo-vertical" />
+        <Sider
+          trigger={null}
+          collapsible
+          collapsed={collapsed}
+          className="custom-sider"
+          width={280}
+          collapsedWidth={80}
+        >
+          <div className="sidebar-brand">
+            <div className="brand-content">
+              <div className="brand-icon">
+                <Package className="w-8 h-8 text-white" />
+              </div>
+              {!collapsed && (
+                <div className="brand-text">
+                  <Text className="brand-title">AdminPanel</Text>
+                  <Text className="brand-subtitle">Management</Text>
+                </div>
+              )}
+            </div>
+          </div>
+
           <Menu
             theme="dark"
             mode="inline"
@@ -59,50 +73,42 @@ export default function Sidemenu({ children }: { children: ReactNode }) {
             onClick={(info) => {
               handleMenuBarFun(info);
             }}
+            className="custom-menu"
             items={[
               {
                 key: "1",
-                icon: <DashboardOutlined />,
+                icon: <Home className="w-5 h-5" />,
                 label: "Dashboard",
+                className: "menu-item-custom",
               },
-              // {
-              //   key: "2",
-              //   icon: <ShopOutlined />,
-              //   label: "Shop",
-              // },
               {
-                key: "3",
-                icon: <UploadOutlined />,
-                label: "Products",
-                children: [
-                  { key: "5", icon: <ShopOutlined />, label: "Shop" },
-                  {
-                    key: "6",
-                    icon: <LayoutGrid className="w-[14px] h-[14px]" />,
-                    label: "Categories",
-                  },
-                ],
+                key: "2",
+                icon: <Home className="w-5 h-5" />,
+                label: "Categories",
+                className: "menu-item-custom",
+              
               },
             ]}
           />
         </Sider>
-        <Layout>
-          <Header style={{ padding: 0, background: colorBgContainer }}>
-            <Row>
-              <Col span={2}>
-                {" "}
-                <Button
-                  type="text"
-                  icon={
-                    collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />
-                  }
-                  onClick={() => setCollapsed(!collapsed)}
-                  style={{
-                    fontSize: "16px",
-                    width: 64,
-                    height: 64,
-                  }}
-                />
+
+        <Layout className="main-layout">
+          <Header className="custom-header">
+            <Row align="middle" style={{ height: "100%" }}>
+              <Col flex="auto">
+                <div className="header-left">
+                  <Button
+                    type="text"
+                    icon={
+                      collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />
+                    }
+                    onClick={() => setCollapsed(!collapsed)}
+                    className="menu-toggle-btn"
+                  />
+                  <div className="greeting-section">
+                    <GreetingContent />
+                  </div>
+                </div>
               </Col>
               <Col span={20}>
                 <GreetingContent />
@@ -120,17 +126,29 @@ export default function Sidemenu({ children }: { children: ReactNode }) {
                     <CircleUserRound style={{ cursor: "pointer" }} />
                   </Popconfirm>
                 </Row>
+                 </Col>
+              <Col>
+                <div className="header-right">
+                  <Dropdown
+                    menu={{ items: userMenuItems }}
+                    placement="bottomRight"
+                    arrow
+                    trigger={['click']}
+                  >
+                    <div className="user-profile-dropdown">
+                      <Avatar 
+                        size={40}
+                        className="user-avatar"
+                        icon={<CircleUserRound className="w-5 h-5" />}
+                      />
+                    </div>
+                  </Dropdown>
+                </div>
               </Col>
             </Row>
           </Header>
-          <Content
-            style={{
-              margin: "24px 16px",
-              padding: 24,
-              background: colorBgContainer,
-              borderRadius: borderRadiusLG,
-            }}
-          >
+          
+          <Content className="main-content">
             {children}
           </Content>
         </Layout>
