@@ -45,6 +45,5 @@ export const deleteMethod = async () => {
   } catch (error) {
     console.error(error);
   } finally {
-    console.log("This always runs");
   }
 };
