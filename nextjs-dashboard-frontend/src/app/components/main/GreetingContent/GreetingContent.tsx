@@ -1,9 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Sun, Moon, Coffee, BedDouble } from "lucide-react";
+import { Sun, Moon, BedDouble } from "lucide-react";
 
-const GreetingContent = ({ userName = "Vincent" }) => {
+const GreetingContent = () => {
   const [greeting, setGreeting] = useState("");
   const [Icon, setIcon] = useState(() => Sun);
 
@@ -49,7 +49,7 @@ const GreetingContent = ({ userName = "Vincent" }) => {
         <Icon className="text-yellow-500 w-7 h-7" />
       </motion.div>
       <span>
-        {greeting}, {userName}!
+        {greeting}, Admin!
       </span>
     </motion.div>
   );

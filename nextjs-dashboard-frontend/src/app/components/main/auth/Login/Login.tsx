@@ -5,6 +5,7 @@ import { Card, Typography, Space, message } from "antd";
 import { useRouter } from "next/navigation";
 import SendOtp from "./SendOtp";
 import VerifyOtp from "./VerifyOtp";
+import axios from "axios";
 
 const { Title } = Typography;
 
@@ -18,7 +19,6 @@ const Login: React.FC = () => {
     try {
       setLoading(true);
       setMobileNumber(mobile);
-      console.log("Sending OTP to:", mobile);
       setStep("otp");
     } catch (error) {
       console.error("Failed to send OTP:", error);
@@ -28,6 +28,19 @@ const Login: React.FC = () => {
     }
   };
 
+  // const handleMobileSubmit = async (mobileNumber: string) => {
+  //   try {
+  //     const apiUrl = "https://api.crispyminds.com/api/v1";
+  
+  //     const response = await axios.post(apiUrl, {
+  //       phone_number: '918667857082',
+  //     });
+  
+  //     console.log("API Response:", response.data);
+  //   } catch (error) {
+  //     console.error("Error submitting mobile number:", error);
+  //   }
+  // };
   const handleOtpSubmit = async (otp: string) => {
     try {
       setLoading(true);

@@ -1,7 +1,11 @@
-export default function Categories (){
+import CategoriesMain from "@/Screens/Categories/CategoriesMain";
+
+export default function page (){
     return (
         <>
-        <h1>Hello Categories</h1>
+        <div>
+            <CategoriesMain/>
+            </div>
         </>
     )
 }
