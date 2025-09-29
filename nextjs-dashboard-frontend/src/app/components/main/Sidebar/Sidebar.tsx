@@ -8,7 +8,7 @@ import {
 import type { PopconfirmProps } from "antd";
 import { Button, Layout, Menu, Col, Row, Avatar, Dropdown, Typography, Popconfirm } from "antd";
 import { useRouter } from "next/navigation";
-import { CircleUserRound, Package, Home } from "lucide-react";
+import { CircleUserRound, Package, Home, LayoutGrid  } from "lucide-react";
 import GreetingContent from "../GreetingContent/GreetingContent";
 
 const { Header, Sider, Content } = Layout;
@@ -83,7 +83,7 @@ export default function Sidemenu({ children }: { children: ReactNode }) {
               },
               {
                 key: "2",
-                icon: <Home className="w-5 h-5" />,
+                icon: <LayoutGrid className="w-5 h-5" />,
                 label: "Categories",
                 className: "menu-item-custom",
               
@@ -110,23 +110,6 @@ export default function Sidemenu({ children }: { children: ReactNode }) {
                   </div>
                 </div>
               </Col>
-              <Col span={20}>
-                <GreetingContent />
-              </Col>
-              <Col span={2}>
-                <Row justify="center" align="middle" style={{ height: "100%" }}>
-                  <Popconfirm
-                    title="Logout"
-                    description="Do you really want to sign out of your account?"
-                    onConfirm={confirm}
-                    onCancel={cancel}
-                    okText="Yes"
-                    cancelText="No"
-                  >
-                    <CircleUserRound style={{ cursor: "pointer" }} />
-                  </Popconfirm>
-                </Row>
-                 </Col>
               <Col>
                 <div className="header-right">
                   <Dropdown

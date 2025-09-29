@@ -267,3 +267,15 @@
 /* Collapsed Sidebar */
 .ant-layout-sider-collapsed .brand-text { opacity: 0; }
 .ant-layout-sider-collapsed .custom-menu .ant-menu-item { text-align: center; }
+
+.card-container {
+    width: 100%;
+    min-height: 240px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-left: 6px solid #6A1B9A;
+    border-radius: 8px;
+    padding: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}

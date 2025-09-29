@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import CustomButton from "@/app/components/main/Ui/CustomButton/CustomButton";
 import CategoryCreate from "./CategoryCreate";
+import Cards from "@/app/components/main/Cards/Cards";
 
 const Category = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -21,6 +22,7 @@ const Category = () => {
         onClose={() => setIsModalOpen(false)}
         onSubmit={handleSubmit}
       />
+    <Cards/>
     </div>
   );
 };
