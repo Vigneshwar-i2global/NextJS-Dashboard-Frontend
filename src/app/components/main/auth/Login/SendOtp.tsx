@@ -32,15 +32,17 @@ const SendOtp: React.FC<SendOtpProps> = ({ loading, onSubmit }) => {
         label="Mobile Number"
         rules={[
           { required: true, message: "Please input your mobile number!" },
-          { 
+          {
             pattern: /^[6-9]\d{9}$/,
-            message: "Please enter a valid 10-digit mobile number!" 
+            message: "Please enter a valid 10-digit mobile number!"
           },
         ]}
         className="mb-6"
       >
         <Input
-          prefix={<MobileOutlined className="text-gray-400" />}
+          prefix={
+            <span className="text-gray-600 font-medium">+91</span>
+          }
           placeholder="Enter your mobile number"
           maxLength={10}
           onChange={(e) => {

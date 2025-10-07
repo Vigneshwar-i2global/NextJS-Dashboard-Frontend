@@ -5,11 +5,13 @@ import {
   MenuUnfoldOutlined,
   LogoutOutlined,
 } from "@ant-design/icons";
-import type { PopconfirmProps } from "antd";
-import { Button, Layout, Menu, Col, Row, Avatar, Dropdown, Typography, Popconfirm } from "antd";
+import type { PopconfirmProps, MenuProps } from "antd";
+import { Button, Layout, Menu, Col, Row, Avatar, Dropdown, Typography, Popconfirm, message } from "antd";
 import { useRouter } from "next/navigation";
 import { CircleUserRound, Package, Home, LayoutGrid  } from "lucide-react";
 import GreetingContent from "../GreetingContent/GreetingContent";
+import { clearAuthData } from "@/app/utils/auth.utils";
+import { setAuthToken } from "@/app/services/api-services";
 
 const { Header, Sider, Content } = Layout;
 const { Text } = Typography;
@@ -27,17 +29,25 @@ export default function Sidemenu({ children }: { children: ReactNode }) {
     }
   };
 
-  const confirm: PopconfirmProps["onConfirm"] = (e) => {
+  const handleLogout = () => {
+    // Clear all authentication data
+    clearAuthData();
+    setAuthToken(null);
+
+    // Show success message
+    message.success("Logged out successfully");
+
+    // Redirect to login page
     router.push("/");
   };
 
-  const cancel: PopconfirmProps["onCancel"] = (e) => {};
-  const userMenuItems = [
+  const userMenuItems: MenuProps["items"] = [
     {
-      key: 'logout',
+      key: "logout",
       icon: <LogoutOutlined />,
-      label: 'Logout',
+      label: "Logout",
       danger: true,
+      onClick: handleLogout,
     },
   ];
 

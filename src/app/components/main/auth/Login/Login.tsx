@@ -3,9 +3,16 @@
 import React, { useState } from "react";
 import { Card, Typography, Space, message } from "antd";
 import { useRouter } from "next/navigation";
+import { AxiosError } from "axios";
 import SendOtp from "./SendOtp";
 import VerifyOtp from "./VerifyOtp";
-import axios from "axios";
+import { loginApi, verifyOtpApi } from "@/app/services/api-services";
+import {
+  formatPhoneNumber,
+  saveAuthToken,
+  saveUserSession,
+} from "@/app/utils/auth.utils";
+import type { AuthError } from "@/app/types/auth.types";
 
 const { Title } = Typography;
 
@@ -18,39 +25,60 @@ const Login: React.FC = () => {
   const handleMobileSubmit = async (mobile: string) => {
     try {
       setLoading(true);
-      setMobileNumber(mobile);
-      setStep("otp");
+
+      // Format phone number with country code
+      const formattedPhoneNumber = formatPhoneNumber(mobile);
+
+      // Call login API
+      const response = await loginApi(formattedPhoneNumber);
+
+      if (response.status === "success") {
+        message.success(response.message);
+        setMobileNumber(formattedPhoneNumber);
+        setStep("otp");
+      } else {
+        message.error("Failed to send OTP. Please try again.");
+      }
     } catch (error) {
       console.error("Failed to send OTP:", error);
-      message.error("Failed to send OTP");
+      const axiosError = error as AxiosError<AuthError>;
+      const errorMessage =
+        axiosError.response?.data?.message || "Failed to send OTP. Please try again.";
+      message.error(errorMessage);
     } finally {
       setLoading(false);
     }
   };
-
-  // const handleMobileSubmit = async (mobileNumber: string) => {
-  //   try {
-  //     const apiUrl = "https://api.crispyminds.com/api/v1";
-  
-  //     const response = await axios.post(apiUrl, {
-  //       phone_number: '918667857082',
-  //     });
-  
-  //     console.log("API Response:", response.data);
-  //   } catch (error) {
-  //     console.error("Error submitting mobile number:", error);
-  //   }
-  // };
   const handleOtpSubmit = async (otp: string) => {
     try {
       setLoading(true);
 
-      if (otp === "1234") {
+      // Call verify OTP API
+      const response = await verifyOtpApi(mobileNumber, otp, "seller");
+
+      if (response.status === "success" && response.data) {
+        message.success(response.message);
+
+        // Save authentication data
+        saveAuthToken(response.data.token);
+        saveUserSession({
+          token: response.data.token,
+          role: response.data.role,
+          isNewUser: response.data.is_new_user,
+          phoneNumber: mobileNumber,
+        });
+
+        // Navigate to dashboard
         router.push("/admin/dashboard");
+      } else {
+        message.error("OTP verification failed. Please try again.");
       }
     } catch (error) {
       console.error("OTP verification failed:", error);
-      message.error("Invalid OTP, try again!");
+      const axiosError = error as AxiosError<AuthError>;
+      const errorMessage =
+        axiosError.response?.data?.message || "Invalid OTP. Please try again.";
+      message.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -59,10 +87,21 @@ const Login: React.FC = () => {
   const handleResendOtp = async () => {
     try {
       setLoading(true);
-      message.success("New OTP sent!");
+
+      // Call login API again to resend OTP
+      const response = await loginApi(mobileNumber);
+
+      if (response.status === "success") {
+        message.success("New OTP sent successfully!");
+      } else {
+        message.error("Failed to resend OTP. Please try again.");
+      }
     } catch (error) {
       console.error("Failed to resend OTP:", error);
-      message.error("Failed to resend OTP");
+      const axiosError = error as AxiosError<AuthError>;
+      const errorMessage =
+        axiosError.response?.data?.message || "Failed to resend OTP. Please try again.";
+      message.error(errorMessage);
     } finally {
       setLoading(false);
     }
