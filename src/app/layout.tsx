@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { poppins } from "./fonts/app.font";
+import { NotificationProvider } from './components/providers/NotificationProvider';
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -18,7 +19,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${poppins.className} antialiased`}>
         <AntdRegistry>
+        <NotificationProvider>
             {children}
+            </NotificationProvider>
         </AntdRegistry>
       </body>
     </html>
