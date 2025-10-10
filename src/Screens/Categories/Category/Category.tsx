@@ -3,15 +3,11 @@
 import React, { useState } from "react";
 import CustomButton from "@/app/components/main/Ui/CustomButton/CustomButton";
 import CategoryCreate from "./CategoryCreate";
-import Cards from "@/app/components/main/Cards/Cards";
 import { Plus } from "lucide-react";
+import CategoryData from "./CategoryData";
 
 const Category = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleSubmit = (values: any) => {
-    console.log("Category Form Submitted:", values);
-  };
 
   return (
     <div>
@@ -25,9 +21,10 @@ const Category = () => {
       <CategoryCreate
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onSubmit={handleSubmit}
       />
-      <Cards />
+      <div className="mt-3">
+        <CategoryData />
+      </div>
     </div>
   );
 };

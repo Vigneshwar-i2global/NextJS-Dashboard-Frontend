@@ -5,13 +5,13 @@ import {
   MenuUnfoldOutlined,
   LogoutOutlined,
 } from "@ant-design/icons";
-import type { PopconfirmProps, MenuProps } from "antd";
-import { Button, Layout, Menu, Col, Row, Avatar, Dropdown, Typography, Popconfirm, message } from "antd";
+import type {  MenuProps } from "antd";
+import { Button, Layout, Menu, Col, Row, Avatar, Dropdown, Typography, message } from "antd";
 import { useRouter } from "next/navigation";
 import { CircleUserRound, Package, Home, LayoutGrid  } from "lucide-react";
 import GreetingContent from "../GreetingContent/GreetingContent";
 import { clearAuthData } from "@/app/utils/auth.utils";
-import { setAuthToken } from "@/app/services/api-services";
+import { setAuthToken } from "@/hooks/authapi";
 
 const { Header, Sider, Content } = Layout;
 const { Text } = Typography;

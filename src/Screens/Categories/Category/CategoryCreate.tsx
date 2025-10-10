@@ -1,39 +1,66 @@
-// components/Ui/CategoryModal/CategoryModal.tsx
 "use client";
-
-import React from "react";
+import React, { useEffect } from "react";
 import { Form, Input, InputNumber } from "antd";
 import CustomModal from "@/app/components/main/Ui/CustomModal/CustomModal";
+import { CreateCategory, UpdateCategory } from "@/hooks/Category/CategoryApi";
+import { useNotification } from "@/app/components/providers/NotificationProvider";
 
 interface CategoryModalProps {
   open: boolean;
   onClose: () => void;
-  onSubmit: (values: any) => void;
+  category?: any; 
 }
 
-const CategoryCreate: React.FC<CategoryModalProps> = ({ open, onClose, onSubmit }) => {
+const CategoryModal: React.FC<CategoryModalProps> = ({ open, onClose, category }) => {
   const [form] = Form.useForm();
+  const { openNotification } = useNotification();
+
+  const createMutation = CreateCategory();
+  const updateMutation = UpdateCategory();
+
+  useEffect(() => {
+    if (category) {
+      form.setFieldsValue({
+        name: category.name,
+        description: category.description,
+        displayOrder: category.display_order,
+      });
+    } else {
+      form.resetFields();
+    }
+  }, [category, form]);
+
+  const handleSubmit = async (values: any) => {
+    try {
+      let res;
+      if (category) {
+        res = await updateMutation.mutateAsync({ ...values, category_id: category.category_id });
+      } else {
+        res = await createMutation.mutateAsync(values);
+      }
+
+      openNotification(
+        "success",
+        res?.message || (category ? "Category updated!" : "Category created!")
+      );
+      form.resetFields();
+      onClose();
+    } catch (err: any) {      
+      openNotification("error", err?.response?.data?.message || "Operation failed.");
+    }
+  };
 
   const handleOk = () => {
-    form
-      .validateFields()
-      .then((values) => {
-        onSubmit(values);
-        form.resetFields();
-        onClose();
-      })
-      .catch((info) => {
-        console.log("Validation Failed:", info);
-      });
+    form.validateFields().then(handleSubmit).catch(() => {});
   };
 
   return (
     <CustomModal
-      title="Add New Category"
+      title={category ? "Edit Category" : "Add New Category"}
       open={open}
       onOk={handleOk}
       onCancel={onClose}
-      okText="Save"
+      okText={category ? "Update" : "Save"}
       cancelText="Cancel"
     >
       <Form form={form} layout="vertical">
@@ -50,7 +77,7 @@ const CategoryCreate: React.FC<CategoryModalProps> = ({ open, onClose, onSubmit 
           name="description"
           rules={[{ required: true, message: "Please enter description" }]}
         >
-          <Input.TextArea rows={3} placeholder="Enter description" />
+          <Input.TextArea rows={5} placeholder="Enter description" />
         </Form.Item>
 
         <Form.Item
@@ -65,4 +92,4 @@ const CategoryCreate: React.FC<CategoryModalProps> = ({ open, onClose, onSubmit 
   );
 };
 
-export default CategoryCreate;
+export default CategoryModal;

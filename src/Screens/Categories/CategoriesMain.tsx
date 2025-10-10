@@ -4,8 +4,7 @@ import Category from "./Category/Category";
 const CategoriesMain = () => {
   const tabItems = [
     { key: "1", label: "Category", children: <Category /> },
-    { key: "2", label: "Attributes", children: <></>},
-
+    { key: "2", label: "Attributes", children: <></> },
   ];
 
   return (

@@ -5,7 +5,7 @@ import { Card, Typography, Space } from "antd";
 import { useRouter } from "next/navigation";
 import SendOtp from "./SendOtp";
 import VerifyOtp from "./VerifyOtp";
-import { loginApi, verifyOtpApi } from "@/app/services/api-services";
+import { loginApi, verifyOtpApi } from "@/hooks/authapi";
 import {
   formatPhoneNumber,
   saveAuthToken,
