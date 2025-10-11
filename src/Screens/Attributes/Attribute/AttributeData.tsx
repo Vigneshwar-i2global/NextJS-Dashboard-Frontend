@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState } from "react";
 import dayjs from "dayjs";
 import { EyeOutlined } from "@ant-design/icons";
@@ -7,121 +6,120 @@ import CommonCard from "@/app/components/main/CommonCard/CommonCard";
 import CustomButton from "@/app/components/main/Ui/CustomButton/CustomButton";
 import CustomLoader from "@/app/components/main/Ui/CustomLoader/CustomLoader";
 import CustomEmpty from "@/app/components/main/Ui/CustomEmpty/CustomEmpty";
-import CategoryModal from "./CategoryCreate";
+import CreateAttributes from "./CreateAttribute";
 import WarningModal from "@/app/components/main/Ui/WarningModal/WarningModal";
-import { GetCategories, DeleteCategory } from "@/hooks/Category/CategoryApi";
+import { deleteAttribute } from "@/hooks/Attribute/AttributeApi";
+import { GetAttribute } from "@/hooks/Attribute/AttributeApi";
 import { useNotification } from "@/app/components/providers/NotificationProvider";
-import { useRouter } from "next/navigation";
+import { Tag } from "antd";
+import {
+  CheckCircleOutlined
+} from '@ant-design/icons';
 
-const CategoryData = () => {
-  const { data, isLoading, isError, error } = GetCategories();
+export default function AttributeData() {
+  const { data, isLoading, isError, error } = GetAttribute();
   const { openNotification } = useNotification();
-  const deleteMutation = DeleteCategory();
-  const router = useRouter();
+  const deleteMutation = deleteAttribute();
 
-  const [selectedCategory, setSelectedCategory] = useState<any>(null);
+  const [selectedAttribute, setSelectedAttribute] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
-  const handleEdit = (category: any) => {
-    setSelectedCategory(category);
+  const handleEdit = (attribute: any) => {
+    setSelectedAttribute(attribute);
     setIsModalOpen(true);
   };
 
-  const handleDelete = (category: any) => {
-    setSelectedCategory(category);
+  const handleDelete = (attribute: any) => {
+    setSelectedAttribute(attribute);
     setIsDeleteOpen(true);
   };
 
   const confirmDelete = () => {
-    if (!selectedCategory) return;
+    if (!selectedAttribute) return;
 
-    deleteMutation.mutate(selectedCategory.category_id, {
+    deleteMutation.mutate(selectedAttribute.attribute_id, {
       onSuccess: () => {
-        openNotification("success", "Category deleted successfully!");
+        openNotification("success", "Attribute deleted successfully!");
         setIsDeleteOpen(false);
-        setSelectedCategory(null);
+        setSelectedAttribute(null);
       },
       onError: (err: any) => {
         openNotification(
           "error",
-          err?.response?.data?.message || "Failed to delete category."
+          err?.response?.data?.message || "Failed to delete attribute."
         );
       },
     });
   };
 
-  if (isLoading) return <CustomLoader text="Loading categories..." />;
+  if (isLoading) return <CustomLoader text="Loading Attributes..." />;
 
   if (isError)
     return (
       <div className="text-center text-red-500 font-medium mt-10">
-        Failed to load categories: {error?.message || "Unknown error"}
+        Failed to load Attributes: {error?.message || "Unknown error"}
       </div>
     );
 
   if (!data || data.length === 0)
-    return <CustomEmpty message="No categories available" />;
-
+    return <CustomEmpty message="No Attributes available" />;
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {data.map((category: any) => (
+        {data.map((attribute: any) => (
           <CommonCard
-            key={category.category_id}
+            key={attribute.attribute_id}
             variant="white"
-            onEdit={() => handleEdit(category)}
-            onDelete={() => handleDelete(category)}
+            onEdit={() => handleEdit(attribute)}
+            onDelete={() => handleDelete(attribute)}
           >
+            <div className="mb-4">
+            <Tag icon={<CheckCircleOutlined />} color="success">
+              Active
+            </Tag>
+            </div>
             <div className="mb-4 flex justify-between items-start">
               <span className="px-3 py-1.5 bg-gray-100 text-[#000] rounded-lg text-xs font-semibold shadow-sm">
-                Order: {category.display_order}
+                Type :{" "}
+                {attribute.data_type.charAt(0).toUpperCase() +
+                  attribute.data_type.slice(1).toLowerCase()}
               </span>
               <span className="text-xs text-gray-500 font-medium">
-                {dayjs(category.created_at).format("DD MMM YYYY")}
+                {dayjs(attribute.created_at).format("DD MMM YYYY")}
               </span>
             </div>
 
             <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2">
-              {category.name}
+              {attribute.name}
             </h3>
 
             <p className="text-gray-600 text-sm mb-6 line-clamp-3 min-h-[60px]">
-              {category.description || "No description provided."}
+              {attribute.description || "No description provided."}
             </p>
 
             <div className="flex justify-end pt-4 border-t border-gray-100">
-              <CustomButton
-                label="View Sub Category"
-                icon={<EyeOutlined />}
-                onClick={() =>
-                  router.push(
-                    `/admin/subCategories/${category.category_id}`
-                  )
-                }
-              />
+              <CustomButton label="View Details" icon={<EyeOutlined />} />
             </div>
           </CommonCard>
         ))}
       </div>
 
-      <CategoryModal
+      <CreateAttributes
         open={isModalOpen}
-        category={selectedCategory}
+        attributes={selectedAttribute}
         onClose={() => {
           setIsModalOpen(false);
-          setSelectedCategory(null);
+          setSelectedAttribute(null);
         }}
       />
 
       <WarningModal
         open={isDeleteOpen}
-        message={`Are you sure you want to delete "${selectedCategory?.name}"?`}
+        message={`Are you sure you want to delete "${selectedAttribute?.name}"?`}
         onConfirm={confirmDelete}
         onCancel={() => setIsDeleteOpen(false)}
       />
     </>
   );
-};
-
-export default CategoryData;
+}

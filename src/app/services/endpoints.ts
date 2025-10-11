@@ -9,5 +9,9 @@ export const ENDPOINTS = {
 
   CATEGORY:{
     CATEGORIES:"/categories"
+  },
+
+  ATTRIBUTES:{
+   ATTRIBUTES : "/attributes"
   }
 } as const;

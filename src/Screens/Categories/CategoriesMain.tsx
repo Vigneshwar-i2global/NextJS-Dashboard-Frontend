@@ -1,10 +1,10 @@
 import CustomTabs from "@/app/components/main/Ui/CustomTabs/CustomTabs";
 import Category from "./Category/Category";
-
+import Attribute from "../Attributes/Attribute/Attribute";
 const CategoriesMain = () => {
   const tabItems = [
     { key: "1", label: "Category", children: <Category /> },
-    { key: "2", label: "Attributes", children: <></> },
+    { key: "2", label: "Attributes", children: <Attribute/> },
   ];
 
   return (

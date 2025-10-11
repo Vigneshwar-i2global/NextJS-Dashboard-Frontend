@@ -1,11 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Card, Button, Popover } from "antd";
-import {
-  MoreOutlined,
-  EditOutlined,
-  DeleteOutlined,
-} from "@ant-design/icons";
+import { MoreOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 
 interface CommonCardProps {
   children: React.ReactNode;
@@ -25,13 +21,13 @@ const CommonCard: React.FC<CommonCardProps> = ({
   const [popoverOpen, setPopoverOpen] = useState(false);
 
   const handleEdit = () => {
-    setPopoverOpen(false);  
-    onEdit?.();              
+    setPopoverOpen(false);
+    onEdit?.();
   };
 
   const handleDelete = () => {
-    setPopoverOpen(false);  
-    onDelete?.();            
+    setPopoverOpen(false);
+    onDelete?.();
   };
 
   const menuContent = (
@@ -70,32 +66,31 @@ const CommonCard: React.FC<CommonCardProps> = ({
   };
 
   return (
-    <Card
-      style={getCardStyle()}
-      className="rounded-lg transition-all relative hover:shadow-md"
-    >
-      {showMenu && (onEdit || onDelete) && (
-        <div className="absolute top-3 right-3 z-10">
-          <Popover
-            content={menuContent}
-            trigger="click"
-            placement="bottomRight"
-            open={popoverOpen}
-            onOpenChange={setPopoverOpen}
+      <Card
+        style={getCardStyle()}
+        className="rounded-lg transition-all relative hover:shadow-md"
+      >
+        {showMenu && (onEdit || onDelete) && (
+          <div className="absolute top-3 right-3 z-10">
+            <Popover
+              content={menuContent}
+              trigger="click"
+              placement="bottomRight"
+              open={popoverOpen}
+              onOpenChange={setPopoverOpen}
+            >
+              <Button
+                type="text"
+                shape="circle"
+                icon={<MoreOutlined />}
+                className="hover:bg-gray-200"
+              />
+            </Popover>
+          </div>
+        )}
 
-          >
-            <Button
-              type="text"
-              shape="circle"
-              icon={<MoreOutlined />}
-              className="hover:bg-gray-200"
-            />
-          </Popover>
-        </div>
-      )}
-
-      <div className="pr-8">{children}</div>
-    </Card>
+        <div className="pr-8">{children}</div>
+      </Card>
   );
 };
 
