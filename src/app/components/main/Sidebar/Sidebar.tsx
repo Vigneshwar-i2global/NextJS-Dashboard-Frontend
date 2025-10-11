@@ -94,7 +94,7 @@ export default function Sidemenu({ children }: { children: ReactNode }) {
               {
                 key: "2",
                 icon: <LayoutGrid className="w-5 h-5" />,
-                label: "Categories",
+                label: "Catalog-Services",
                 className: "menu-item-custom",
               
               },
