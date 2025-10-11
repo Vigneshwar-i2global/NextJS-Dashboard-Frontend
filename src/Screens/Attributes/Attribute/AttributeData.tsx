@@ -1,25 +1,21 @@
 "use client";
 import React, { useState } from "react";
 import dayjs from "dayjs";
-import { EyeOutlined } from "@ant-design/icons";
+import { EyeOutlined, CheckCircleOutlined } from "@ant-design/icons";
+import { Tag } from "antd";
 import CommonCard from "@/app/components/main/CommonCard/CommonCard";
 import CustomButton from "@/app/components/main/Ui/CustomButton/CustomButton";
 import CustomLoader from "@/app/components/main/Ui/CustomLoader/CustomLoader";
 import CustomEmpty from "@/app/components/main/Ui/CustomEmpty/CustomEmpty";
 import CreateAttributes from "./CreateAttribute";
 import WarningModal from "@/app/components/main/Ui/WarningModal/WarningModal";
-import { deleteAttribute } from "@/hooks/Attribute/AttributeApi";
-import { GetAttribute } from "@/hooks/Attribute/AttributeApi";
+import { DeleteAttribute, GetAttribute } from "@/hooks/Attribute/AttributeApi";
 import { useNotification } from "@/app/components/providers/NotificationProvider";
-import { Tag } from "antd";
-import {
-  CheckCircleOutlined
-} from '@ant-design/icons';
 
 export default function AttributeData() {
   const { data, isLoading, isError, error } = GetAttribute();
   const { openNotification } = useNotification();
-  const deleteMutation = deleteAttribute();
+  const deleteMutation = DeleteAttribute();
 
   const [selectedAttribute, setSelectedAttribute] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -37,7 +33,6 @@ export default function AttributeData() {
 
   const confirmDelete = () => {
     if (!selectedAttribute) return;
-
     deleteMutation.mutate(selectedAttribute.attribute_id, {
       onSuccess: () => {
         openNotification("success", "Attribute deleted successfully!");
@@ -54,16 +49,15 @@ export default function AttributeData() {
   };
 
   if (isLoading) return <CustomLoader text="Loading Attributes..." />;
-
   if (isError)
     return (
       <div className="text-center text-red-500 font-medium mt-10">
         Failed to load Attributes: {error?.message || "Unknown error"}
       </div>
     );
-
   if (!data || data.length === 0)
     return <CustomEmpty message="No Attributes available" />;
+
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -74,32 +68,59 @@ export default function AttributeData() {
             onEdit={() => handleEdit(attribute)}
             onDelete={() => handleDelete(attribute)}
           >
-            <div className="mb-4">
-            <Tag icon={<CheckCircleOutlined />} color="success">
-              Active
-            </Tag>
-            </div>
-            <div className="mb-4 flex justify-between items-start">
-              <span className="px-3 py-1.5 bg-gray-100 text-[#000] rounded-lg text-xs font-semibold shadow-sm">
-                Type :{" "}
-                {attribute.data_type.charAt(0).toUpperCase() +
-                  attribute.data_type.slice(1).toLowerCase()}
-              </span>
-              <span className="text-xs text-gray-500 font-medium">
-                {dayjs(attribute.created_at).format("DD MMM YYYY")}
-              </span>
+            <div className="mb-4 flex justify-start">
+              <Tag icon={<CheckCircleOutlined />} color="success">
+                Active
+              </Tag>
             </div>
 
-            <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2">
-              {attribute.name}
-            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-4 pb-4 border-b border-gray-200">
+            
+              <div>
+                <p className="text-xs font-bold text-black uppercase tracking-wide mb-1">
+                 Attribute Name
+                </p>
+                <p className="text-sm text-gray-600 line-clamp-1">
+                  {attribute.name}
+                </p>
+              </div>
 
-            <p className="text-gray-600 text-sm mb-6 line-clamp-3 min-h-[60px]">
-              {attribute.description || "No description provided."}
-            </p>
 
+            <div>
+                <p className="text-xs font-bold text-black uppercase tracking-wide mb-1">
+                  Created Date
+                </p>
+                <p className="text-sm text-gray-600">
+                  {dayjs(attribute.created_at).format("DD MMM YYYY")}
+                </p>
+              </div>
+
+              <div>
+                <p className="text-xs font-bold text-black uppercase tracking-wide mb-1">
+                  Type
+                </p>
+                <p className="text-sm text-gray-600">
+                  {attribute.data_type.charAt(0).toUpperCase() +
+                    attribute.data_type.slice(1).toLowerCase()}
+                </p>
+              </div>
+
+           
+            </div>
+            <div>
+                <p className="text-xs font-bold text-black uppercase tracking-wide mb-1">
+                  Description
+                </p>
+                <p className="text-sm text-gray-600 line-clamp-2">
+                  {attribute.description || "No description"}
+                </p>
+              </div>
             <div className="flex justify-end pt-4 border-t border-gray-100">
-              <CustomButton label="View Details" icon={<EyeOutlined />} />
+              <CustomButton
+                label="View Details"
+                icon={<EyeOutlined />}
+                className="!text-sm"
+              />
             </div>
           </CommonCard>
         ))}

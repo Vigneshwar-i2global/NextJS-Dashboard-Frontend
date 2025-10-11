@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Card, Button, Popover } from "antd";
-import { MoreOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { EditOutlined, DeleteOutlined, MoreOutlined } from "@ant-design/icons";
 
 interface CommonCardProps {
   children: React.ReactNode;
@@ -13,84 +12,80 @@ interface CommonCardProps {
 
 const CommonCard: React.FC<CommonCardProps> = ({
   children,
-  variant = "default",
+  variant = "white",
   onEdit,
   onDelete,
   showMenu = true,
 }) => {
-  const [popoverOpen, setPopoverOpen] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  const handleEdit = () => {
-    setPopoverOpen(false);
-    onEdit?.();
-  };
-
-  const handleDelete = () => {
-    setPopoverOpen(false);
-    onDelete?.();
-  };
-
-  const menuContent = (
-    <div className="flex flex-col gap-1 min-w-[50px]">
-      <Button
-        type="text"
-        icon={<EditOutlined />}
-        onClick={handleEdit}
-        className="flex items-center justify-start w-full hover:bg-blue-50"
-      >
-        Edit
-      </Button>
-      <Button
-        type="text"
-        danger
-        icon={<DeleteOutlined />}
-        onClick={handleDelete}
-        className="flex items-center justify-start w-full hover:bg-red-50"
-      >
-        Delete
-      </Button>
-    </div>
-  );
-
-  const getCardStyle = () => {
+  const getVariantClasses = () => {
     switch (variant) {
       case "bordered":
-        return { background: "#fff", border: "2px solid #93C5FD" };
+        return "bg-gray-50 border-2 border-blue-300";
       case "grey":
-        return { background: "#F9FAFB", border: "2px solid #D1D5DB" };
+        return "bg-gray-50 border border-gray-200";
       case "white":
-        return { background: "#fff", border: "1px solid #E5E7EB" };
+        return "bg-gray-50 border border-gray-200";
       default:
-        return { background: "#fff" };
+        return "bg-gray-50 border border-gray-200";
     }
   };
 
   return (
-      <Card
-        style={getCardStyle()}
-        className="rounded-lg transition-all relative hover:shadow-md"
-      >
-        {showMenu && (onEdit || onDelete) && (
-          <div className="absolute top-3 right-3 z-10">
-            <Popover
-              content={menuContent}
-              trigger="click"
-              placement="bottomRight"
-              open={popoverOpen}
-              onOpenChange={setPopoverOpen}
-            >
-              <Button
-                type="text"
-                shape="circle"
-                icon={<MoreOutlined />}
-                className="hover:bg-gray-200"
-              />
-            </Popover>
-          </div>
-        )}
+    <div
+      className={`${getVariantClasses()} rounded-xl overflow-visible transition-all duration-300 ease-out relative ${
+        isHovered ? "shadow-lg -translate-y-1" : "shadow-sm"
+      }`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => {
+        setIsHovered(false);
+        setMenuOpen(false);
+      }}
+    >
+      <div className="p-6">{children}</div>
 
-        <div className="pr-8">{children}</div>
-      </Card>
+      {showMenu && (onEdit || onDelete) && (
+        <div className="absolute top-4 right-4 z-20">
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="p-2 "
+          >
+            <MoreOutlined className="text-lg" />
+          </button>
+
+          {menuOpen && (
+            <div className="absolute top-full right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden min-w-[140px]">
+              {onEdit && (
+                <button
+                  onClick={() => {
+                    onEdit();
+                    setMenuOpen(false);
+                  }}
+                  className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-blue-600 hover:bg-blue-50 transition-colors border-b border-gray-100"
+                >
+                  <EditOutlined className="text-base" />
+                  <span>Edit</span>
+                </button>
+              )}
+              {onDelete && (
+                <button
+                  onClick={() => {
+                    onDelete();
+                    setMenuOpen(false);
+                  }}
+                  className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                >
+                  <DeleteOutlined className="text-base" />
+                  <span>Delete</span>
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
   );
 };
 

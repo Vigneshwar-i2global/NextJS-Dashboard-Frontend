@@ -39,15 +39,17 @@ export const UpdateCategory = () => {
   return useMutation({
     mutationKey: ["updateCategory"],
     mutationFn: async (payload: Record<string, any>) => {
-      const url = ENDPOINTS.CATEGORY.CATEGORIES;
-      const res = await putMethod(url, payload);
+      const { category_id, ...data } = payload;      
+      const url = `${ENDPOINTS.CATEGORY.CATEGORIES}/${category_id}`;
+      const res = await putMethod(url, data);
       return res.data;
-    },
+    },    
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["categories"] });
     },
   });
 };
+
 
 
 

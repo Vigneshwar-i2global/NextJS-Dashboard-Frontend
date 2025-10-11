@@ -27,7 +27,6 @@ const VerifyOtp: React.FC<VerifyOtpProps> = ({
 
   const handleOtpChange = (value: string) => {
     if (value && value.length === 4) {
-      console.log("Auto-submitting OTP:", value);
       onSubmit(value);
     }
   };

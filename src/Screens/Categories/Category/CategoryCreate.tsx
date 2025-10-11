@@ -1,40 +1,57 @@
 "use client";
-import React, { useEffect } from "react";
-import { Form, Input, InputNumber } from "antd";
-import CustomModal from "@/app/components/main/Ui/CustomModal/CustomModal";
+import React from "react";
 import { CreateCategory, UpdateCategory } from "@/hooks/Category/CategoryApi";
 import { useNotification } from "@/app/components/providers/NotificationProvider";
+import FormModal, { FormField } from "@/app/components/main/Ui/CustomModal/FormModal";
 
 interface CategoryModalProps {
   open: boolean;
   onClose: () => void;
-  category?: any; 
+  category?: any;
 }
 
 const CategoryModal: React.FC<CategoryModalProps> = ({ open, onClose, category }) => {
-  const [form] = Form.useForm();
   const { openNotification } = useNotification();
+  const [loading, setLoading] = React.useState(false);
 
   const createMutation = CreateCategory();
   const updateMutation = UpdateCategory();
 
-  useEffect(() => {
-    if (category) {
-      form.setFieldsValue({
-        name: category.name,
-        description: category.description,
-        displayOrder: category.display_order,
-      });
-    } else {
-      form.resetFields();
-    }
-  }, [category, form]);
+  const fields: FormField[] = [
+    {
+      name: "name",
+      label: "Name",
+      type: "text",
+      placeholder: "Enter category name",
+      required: true,
+    },
+    {
+      name: "description",
+      label: "Description",
+      type: "textarea",
+      placeholder: "Enter description",
+      rows: 5,
+      required: true,
+    },
+    {
+      name: "displayOrder",
+      label: "Display Order",
+      type: "number",
+      placeholder: "Enter display order",
+      required: true,
+      min: 1,
+    },
+  ];
 
   const handleSubmit = async (values: any) => {
     try {
+      setLoading(true);
       let res;
       if (category) {
-        res = await updateMutation.mutateAsync({ ...values, category_id: category.category_id });
+        res = await updateMutation.mutateAsync({
+          ...values,
+          category_id: category.category_id,
+        });
       } else {
         res = await createMutation.mutateAsync(values);
       }
@@ -43,52 +60,31 @@ const CategoryModal: React.FC<CategoryModalProps> = ({ open, onClose, category }
         "success",
         res?.message || (category ? "Category updated!" : "Category created!")
       );
-      form.resetFields();
       onClose();
-    } catch (err: any) {      
+    } catch (err: any) {
       openNotification("error", err?.response?.data?.message || "Operation failed.");
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleOk = () => {
-    form.validateFields().then(handleSubmit).catch(() => {});
-  };
-
   return (
-    <CustomModal
-      title={category ? "Edit Category" : "Add New Category"}
+    <FormModal
       open={open}
-      onOk={handleOk}
-      onCancel={onClose}
+      onClose={onClose}
+      onSubmit={handleSubmit}
+      title={category ? "Edit Category" : "Add New Category"}
+      fields={fields}
+      loading={loading}
       okText={category ? "Update" : "Save"}
-      cancelText="Cancel"
-    >
-      <Form form={form} layout="vertical">
-        <Form.Item
-          label="Name"
-          name="name"
-          rules={[{ required: true, message: "Please enter category name" }]}
-        >
-          <Input placeholder="Enter category name" />
-        </Form.Item>
-
-        <Form.Item
-          label="Description"
-          name="description"
-          rules={[{ required: true, message: "Please enter description" }]}
-        >
-          <Input.TextArea rows={5} placeholder="Enter description" />
-        </Form.Item>
-
-        <Form.Item
-          label="Display Order"
-          name="displayOrder"
-          rules={[{ required: true, message: "Please enter display order" }]}
-        >
-          <InputNumber min={1} className="w-full" />
-        </Form.Item>
-      </Form>
-    </CustomModal>
+      initialValues={
+        category ? {
+          name: category.name,
+          description: category.description,
+          displayOrder: category.display_order,
+        } : undefined
+      }
+    />
   );
 };
 

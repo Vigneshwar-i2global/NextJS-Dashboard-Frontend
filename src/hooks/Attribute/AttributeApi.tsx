@@ -35,7 +35,7 @@ export const CreateAttribute = () => {
   });
 };
 
-export const updateAttribute = () => {
+export const UpdateAttribute = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -52,7 +52,7 @@ export const updateAttribute = () => {
 };
 
 
-export const deleteAttribute = () => {
+export const DeleteAttribute = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
