@@ -1,4 +1,3 @@
-
 export const API_BASE_URL = "https://api.crispyminds.com/api/v1";
 
 export const ENDPOINTS = {
@@ -7,11 +6,21 @@ export const ENDPOINTS = {
     VERIFY_OTP: "/verify-otp",
   },
 
-  CATEGORY:{
-    CATEGORIES:"/categories"
+  CATEGORY: {
+    CATEGORIES: "/categories",
+  },
+  SUBCATEGORY: {
+    SUBCATEGORIES: "/categories",
   },
 
-  ATTRIBUTES:{
-   ATTRIBUTES : "/attributes"
+  ATTRIBUTES: {
+    ATTRIBUTES: "/attributes",
+  },
+  LOCATION:{
+    COUNTRIES:"/countries",
+    STATES:"/states",
+    DISTRICTS:"/districts"
+
+
   }
 } as const;

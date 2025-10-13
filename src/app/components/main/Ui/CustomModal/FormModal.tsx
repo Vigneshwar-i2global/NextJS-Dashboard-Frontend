@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Modal, Input, InputNumber, Button, Spin, Select, Checkbox, Space } from "antd";
+import { Modal, Input, InputNumber, Button, Select, Checkbox } from "antd";
 
 export type FormField = {
   name: string;
@@ -24,6 +24,7 @@ interface FormModalProps {
   okText?: string;
   initialValues?: Record<string, any>;
   headerBgColor?: string;
+  errors?: Record<string, string>;
 }
 
 const FormModal: React.FC<FormModalProps> = ({
@@ -35,6 +36,7 @@ const FormModal: React.FC<FormModalProps> = ({
   loading = false,
   okText = "Save",
   initialValues,
+  errors = {},
 }) => {
   const [formValues, setFormValues] = React.useState<Record<string, any>>(
     initialValues || {}
@@ -57,39 +59,54 @@ const FormModal: React.FC<FormModalProps> = ({
   };
 
   const renderField = (field: FormField) => {
+    const error = errors[field.name];
+    const status = error ? "error" : undefined;
+
     switch (field.type) {
       case "textarea":
         return (
-          <Input.TextArea
-            placeholder={field.placeholder}
-            rows={field.rows || 4}
-            value={formValues[field.name] || ""}
-            onChange={(e) => handleChange(field.name, e.target.value)}
-            className="rounded-lg"
-          />
+          <>
+            <Input.TextArea
+              placeholder={field.placeholder}
+              rows={field.rows || 4}
+              value={formValues[field.name] || ""}
+              onChange={(e) => handleChange(field.name, e.target.value)}
+              className="rounded-lg"
+              status={status}
+            />
+            {error && <span className="text-red-500 text-sm mt-1">{error}</span>}
+          </>
         );
       case "number":
         return (
-          <InputNumber
-            placeholder={field.placeholder}
-            value={formValues[field.name] || ""}
-            onChange={(value) => handleChange(field.name, value)}
-            min={field.min || 0}
-            className="w-full rounded-lg"
-          />
+          <>
+            <InputNumber
+              placeholder={field.placeholder}
+              value={formValues[field.name] || ""}
+              onChange={(value) => handleChange(field.name, value)}
+              min={field.min || 0}
+              className="w-full rounded-lg"
+              status={status}
+            />
+            {error && <span className="text-red-500 text-sm mt-1">{error}</span>}
+          </>
         );
       case "select":
         return (
-          <Select
-            showSearch
-            labelInValue
-            placeholder={field.placeholder || "Select an option"}
-            optionFilterProp="label"
-            options={field.options}
-            value={formValues[field.name] || undefined}
-            onChange={(value) => handleChange(field.name, value)}
-            className="rounded-lg"
-          />
+          <>
+            <Select
+              showSearch
+              labelInValue
+              placeholder={field.placeholder || "Select an option"}
+              optionFilterProp="label"
+              options={field.options}
+              value={formValues[field.name] || undefined}
+              onChange={(value) => handleChange(field.name, value)}
+              className="rounded-lg"
+              status={status}
+            />
+            {error && <span className="text-red-500 text-sm mt-1">{error}</span>}
+          </>
         );
       case "checkbox":
         return (
@@ -102,12 +119,16 @@ const FormModal: React.FC<FormModalProps> = ({
         );
       default:
         return (
-          <Input
-            placeholder={field.placeholder}
-            value={formValues[field.name] || ""}
-            onChange={(e) => handleChange(field.name, e.target.value)}
-            className="rounded-lg"
-          />
+          <>
+            <Input
+              placeholder={field.placeholder}
+              value={formValues[field.name] || ""}
+              onChange={(e) => handleChange(field.name, e.target.value)}
+              className="rounded-lg"
+              status={status}
+            />
+            {error && <span className="text-red-500 text-sm mt-1">{error}</span>}
+          </>
         );
     }
   };
@@ -119,7 +140,6 @@ const FormModal: React.FC<FormModalProps> = ({
       onCancel={onClose}
       footer={null}
       centered
-      
     >
       <div className="space-y-4 mt-4">
         {fields.map((field) => {

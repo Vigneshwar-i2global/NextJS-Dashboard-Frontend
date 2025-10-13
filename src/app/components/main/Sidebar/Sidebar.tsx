@@ -12,6 +12,9 @@ import { CircleUserRound, Package, Home, LayoutGrid  } from "lucide-react";
 import GreetingContent from "../GreetingContent/GreetingContent";
 import { clearAuthData } from "@/app/utils/auth.utils";
 import { setAuthToken } from "@/hooks/authapi";
+import { FaLocationArrow } from "react-icons/fa";
+import { MdCategory } from "react-icons/md";
+import { AiFillDashboard } from "react-icons/ai";
 
 const { Header, Sider, Content } = Layout;
 const { Text } = Typography;
@@ -22,22 +25,18 @@ export default function Sidemenu({ children }: { children: ReactNode }) {
   const handleMenuBarFun = ({ key }: { key: string }) => {
     if (key === "1") {
       router.push("/admin/dashboard");
-    } else if (key === "5") {
-      router.push("/admin/shop");
-    } else {
+    } else if (key === "2") {
       router.push("/admin/categories");
+    } else {
+      router.push("/admin/location");
     }
   };
 
   const handleLogout = () => {
-    // Clear all authentication data
     clearAuthData();
     setAuthToken(null);
 
-    // Show success message
     message.success("Logged out successfully");
-
-    // Redirect to login page
     router.push("/");
   };
 
@@ -87,14 +86,21 @@ export default function Sidemenu({ children }: { children: ReactNode }) {
             items={[
               {
                 key: "1",
-                icon: <Home className="w-5 h-5" />,
+                icon: <AiFillDashboard className="w-5 h-5" />,
                 label: "Dashboard",
                 className: "menu-item-custom",
               },
               {
                 key: "2",
-                icon: <LayoutGrid className="w-5 h-5" />,
+                icon: <MdCategory className="w-5 h-5" />,
                 label: "Catalog-Services",
+                className: "menu-item-custom",
+              
+              },
+              {
+                key: "3",
+                icon: <FaLocationArrow className="w-5 h-5" />,
+                label: "Location",
                 className: "menu-item-custom",
               
               },

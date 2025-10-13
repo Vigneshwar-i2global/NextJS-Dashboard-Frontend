@@ -276,3 +276,10 @@
     padding: 6px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
+.css-dev-only-do-not-override-1odpy5d.ant-input-number-outlined {
+  width: 100%;
+}
+
+.css-dev-only-do-not-override-1odpy5d.ant-select-single {
+  width: 100%;
+}

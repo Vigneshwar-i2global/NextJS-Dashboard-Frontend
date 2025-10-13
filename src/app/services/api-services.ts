@@ -61,6 +61,18 @@ export const putMethod = async <T = any, D = any>(
     throw error;
   }
 };
+export const patchMethod = async <T = any, D = any>(
+  url: string,
+  data?: D
+): Promise<T> => {
+  try {
+    const response = await axios.patch<T>(url, data);
+    return response.data;
+  } catch (error) {
+    console.error("PATCH request failed:", error);
+    throw error;
+  }
+};
 
 export const deleteMethod = async <T = any>(url: string): Promise<T> => {
   try {

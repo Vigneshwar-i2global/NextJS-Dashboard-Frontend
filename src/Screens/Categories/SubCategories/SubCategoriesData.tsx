@@ -2,23 +2,25 @@
 
 import React, { useState } from "react";
 import dayjs from "dayjs";
-import { EyeOutlined } from "@ant-design/icons";
 import CommonCard from "@/app/components/main/CommonCard/CommonCard";
-import CustomButton from "@/app/components/main/Ui/CustomButton/CustomButton";
 import CustomLoader from "@/app/components/main/Ui/CustomLoader/CustomLoader";
 import CustomEmpty from "@/app/components/main/Ui/CustomEmpty/CustomEmpty";
-import CategoryModal from "./CategoryCreate";
 import WarningModal from "@/app/components/main/Ui/WarningModal/WarningModal";
-import { GetCategories, DeleteCategory } from "@/hooks/Category/CategoryApi";
 import { useNotification } from "@/app/components/providers/NotificationProvider";
-import { useRouter } from "next/navigation";
+import SubCategoryCreate from "./SubCategoryCreate";
+import {
+  DeleteSubCategory,
+  GetSubCategories,
+} from "@/hooks/Category/SubcategoryApi";
 
-const CategoryData = () => {
-  const { data, isLoading, isError, error } = GetCategories();
+interface SubCategoriesDataProps {
+  slug: string;
+}
+
+const SubCategoriesData: React.FC<SubCategoriesDataProps> = ({ slug }) => {
+  const { data, isLoading, isError, error } = GetSubCategories(slug);
   const { openNotification } = useNotification();
-  const deleteMutation = DeleteCategory();
-  const router = useRouter();
-
+  const deleteMutation = DeleteSubCategory();
   const [selectedCategory, setSelectedCategory] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
@@ -36,39 +38,46 @@ const CategoryData = () => {
   const confirmDelete = () => {
     if (!selectedCategory) return;
 
-    deleteMutation.mutate(selectedCategory.category_id, {
-      onSuccess: () => {
-        openNotification("success", "Category deleted successfully!");
-        setIsDeleteOpen(false);
-        setSelectedCategory(null);
+    deleteMutation.mutate(
+      {
+        subcategory_id: selectedCategory.category_id,
       },
-      onError: (err: any) => {
-        openNotification(
-          "error",
-          err?.response?.data?.message || "Failed to delete category."
-        );
-      },
-    });
+      {
+        onSuccess: () => {
+          openNotification("success", "Subcategory deleted successfully!");
+          setIsDeleteOpen(false);
+          setSelectedCategory(null);
+        },
+        onError: (err: any) => {
+          const apiMessage =
+            err?.response?.data?.error?.message ||
+            err?.response?.data?.message ||
+            "Operation failed.";
+
+          openNotification("error", apiMessage);
+        },
+      }
+    );
   };
 
-  if (isLoading) return <CustomLoader text="Loading categories..." />;
+  if (isLoading) return <CustomLoader text="Loading subcategories..." />;
 
   if (isError)
     return (
       <div className="text-center text-red-500 font-medium mt-10">
-        Failed to load categories: {error?.message || "Unknown error"}
+        Failed to load subcategories: {error?.message || "Unknown error"}
       </div>
     );
 
   return (
     <>
       {!data || data.length === 0 ? (
-        <CustomEmpty message="No categories available" />
+        <CustomEmpty message="No subcategories available" />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {data.map((category: any) => (
             <CommonCard
-              key={category.category_id}
+              key={category.subcategory_id}
               variant="white"
               onEdit={() => handleEdit(category)}
               onDelete={() => handleDelete(category)}
@@ -82,7 +91,7 @@ const CategoryData = () => {
               <div className="mb-4 pb-4 border-b border-gray-200 grid grid-cols-2 gap-6">
                 <div>
                   <p className="text-xs font-bold text-black uppercase tracking-wide mb-1">
-                    Category Name
+                    Subcategory Name
                   </p>
                   <p className="text-lg text-gray-600">{category.name}</p>
                 </div>
@@ -105,30 +114,19 @@ const CategoryData = () => {
                   {category.description || "No description provided."}
                 </p>
               </div>
-
-              <div className="flex justify-end pt-4 border-t border-gray-100">
-                <CustomButton
-                  label="View Sub Category"
-                  icon={<EyeOutlined />}
-                  onClick={() =>
-                    router.push(
-                      `/admin/subCategories/${category.category_id}&${category.name}`
-                    )
-                  }
-                />
-              </div>
             </CommonCard>
           ))}
         </div>
       )}
 
-      <CategoryModal
+      <SubCategoryCreate
         open={isModalOpen}
         category={selectedCategory}
         onClose={() => {
           setIsModalOpen(false);
           setSelectedCategory(null);
         }}
+        slug={slug}
       />
 
       <WarningModal
@@ -141,4 +139,4 @@ const CategoryData = () => {
   );
 };
 
-export default CategoryData;
+export default SubCategoriesData;

@@ -1,36 +1,54 @@
 "use client";
 import React from "react";
-import { CreateCategory, UpdateCategory } from "@/hooks/Category/CategoryApi";
 import { useNotification } from "@/app/components/providers/NotificationProvider";
-import FormModal, { FormField } from "@/app/components/main/Ui/CustomModal/FormModal";
+import FormModal, {
+  FormField,
+} from "@/app/components/main/Ui/CustomModal/FormModal";
+import {
+  CreateSubCategory,
+  UpdateSubCategory,
+} from "@/hooks/Category/SubcategoryApi";
 
 interface CategoryModalProps {
   open: boolean;
   onClose: () => void;
   category?: any;
+  slug?: string;
 }
 
-const CategoryModal: React.FC<CategoryModalProps> = ({ open, onClose, category }) => {
+const SubCategoryCreate: React.FC<CategoryModalProps> = ({
+  open,
+  onClose,
+  category,
+  slug,
+}) => {
   const { openNotification } = useNotification();
   const [loading, setLoading] = React.useState(false);
   const [errors, setErrors] = React.useState<Record<string, string>>({});
 
-  const createMutation = CreateCategory();
-  const updateMutation = UpdateCategory();
+  const createMutation = CreateSubCategory();
+  const updateMutation = UpdateSubCategory();
+
+  const getParentIdFromSlug = (slug: string): string => {
+    if (!slug) return "";
+    const decodedSlug = decodeURIComponent(slug);
+    const parentId = decodedSlug.split("&")[0] || "";
+    return parentId;
+  };
 
   const fields: FormField[] = [
     {
       name: "name",
       label: "Name",
       type: "text",
-      placeholder: "Enter category name",
+      placeholder: "Enter Sub Category Name",
       required: true,
     },
     {
       name: "description",
       label: "Description",
       type: "textarea",
-      placeholder: "Enter description",
+      placeholder: "Enter Description",
       rows: 5,
       required: true,
     },
@@ -38,7 +56,7 @@ const CategoryModal: React.FC<CategoryModalProps> = ({ open, onClose, category }
       name: "displayOrder",
       label: "Display Order",
       type: "number",
-      placeholder: "Enter display order",
+      placeholder: "Enter Display Order",
       required: true,
       min: 1,
     },
@@ -54,7 +72,9 @@ const CategoryModal: React.FC<CategoryModalProps> = ({ open, onClose, category }
         if (value === null || value === undefined || value === "") {
           newErrors[field.name] = `${field.label} is required`;
         } else if (field.type === "number" && value < (field.min || 0)) {
-          newErrors[field.name] = `${field.label} must be at least ${field.min || 0}`;
+          newErrors[field.name] = `${field.label} must be at least ${
+            field.min || 0
+          }`;
         }
       }
     });
@@ -71,29 +91,40 @@ const CategoryModal: React.FC<CategoryModalProps> = ({ open, onClose, category }
 
     try {
       setLoading(true);
+      const parentId = getParentIdFromSlug(slug || "");
+
       let res;
       if (category) {
         res = await updateMutation.mutateAsync({
-          ...values,
-          category_id: category.category_id,
+          subcategory_id: category.category_id,
+          name: values.name,
+          description: values.description,
+          display_order: values.displayOrder,
+          parent_id: parentId,
         });
       } else {
-        res = await createMutation.mutateAsync(values);
+        res = await createMutation.mutateAsync({
+          name: values.name,
+          description: values.description,
+          display_order: values.displayOrder,
+          parent_id: parentId,
+        });
       }
 
       openNotification(
         "success",
-        res?.message || (category ? "Category updated!" : "Category created!")
+        res?.message ||
+          (category ? "Subcategory updated!" : "Subcategory created!")
       );
       setErrors({});
       onClose();
     } catch (err: any) {
       const apiMessage =
-      err?.response?.data?.error?.message ||
-      err?.response?.data?.message ||
-      "Operation failed.";
+        err?.response?.data?.error?.message ||
+        err?.response?.data?.message ||
+        "Operation failed.";
 
-    openNotification("error", apiMessage);
+      openNotification("error", apiMessage);
     } finally {
       setLoading(false);
     }
@@ -104,7 +135,7 @@ const CategoryModal: React.FC<CategoryModalProps> = ({ open, onClose, category }
       open={open}
       onClose={onClose}
       onSubmit={handleSubmit}
-      title={category ? "Edit Category" : "Add New Category"}
+      title={category ? "Edit Sub Category" : "Add Sub Category"}
       fields={fields}
       loading={loading}
       okText={category ? "Update" : "Save"}
@@ -122,4 +153,4 @@ const CategoryModal: React.FC<CategoryModalProps> = ({ open, onClose, category }
   );
 };
 
-export default CategoryModal;
+export default SubCategoryCreate;

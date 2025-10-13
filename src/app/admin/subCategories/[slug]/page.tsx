@@ -1,12 +1,14 @@
 'use client';
+
+import SubCategories from '@/Screens/Categories/SubCategories/SubCategories';
 import { useParams } from 'next/navigation';
 
 export default function SubcategoryPage() {
-  const { slug } = useParams(); // gets the dynamic category ID or slug
+  const { slug } = useParams(); 
 
   return (
     <div>
-      <h1>Subcategories for: {slug}</h1>
+      <SubCategories slug={slug as string} />
     </div>
   );
 }

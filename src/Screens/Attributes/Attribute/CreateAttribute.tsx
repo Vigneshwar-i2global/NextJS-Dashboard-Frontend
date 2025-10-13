@@ -20,6 +20,7 @@ const AttributeModal: React.FC<AttributeModalProps> = ({
 }) => {
   const { openNotification } = useNotification();
   const [loading, setLoading] = React.useState(false);
+  const [errors, setErrors] = React.useState<Record<string, string>>({});
 
   const createMutation = CreateAttribute();
   const updateMutation = UpdateAttribute();
@@ -70,7 +71,34 @@ const AttributeModal: React.FC<AttributeModalProps> = ({
     },
   ];
 
+  const validateForm = (values: any): boolean => {
+    const newErrors: Record<string, string> = {};
+
+    fields.forEach((field) => {
+      if (field.required) {
+        const value = values[field.name];
+
+        if (value === null || value === undefined || value === "") {
+          newErrors[field.name] = `${field.label} is required`;
+        } else if (
+          field.type === "select" &&
+          (!value.value || value.value === "")
+        ) {
+          newErrors[field.name] = `${field.label} is required`;
+        }
+      }
+    });
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async (values: any) => {
+    if (!validateForm(values)) {
+      openNotification("error", "Please fill in all required fields");
+      return;
+    }
+
     try {
       setLoading(true);
 
@@ -99,12 +127,15 @@ const AttributeModal: React.FC<AttributeModalProps> = ({
         res?.message ||
           (attributes ? "Attribute updated!" : "Attribute created!")
       );
+      setErrors({});
       onClose();
     } catch (err: any) {
-      openNotification(
-        "error",
-        err?.response?.data?.message || "Operation failed."
-      );
+      const apiMessage =
+      err?.response?.data?.error?.message ||
+      err?.response?.data?.message ||
+      "Operation failed.";
+
+    openNotification("error", apiMessage);
     } finally {
       setLoading(false);
     }
@@ -130,6 +161,7 @@ const AttributeModal: React.FC<AttributeModalProps> = ({
       loading={loading}
       okText={attributes ? "Update" : "Save"}
       initialValues={initialValues}
+      errors={errors}
     />
   );
 };
