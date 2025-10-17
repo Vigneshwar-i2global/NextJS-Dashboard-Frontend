@@ -22,5 +22,11 @@ export const ENDPOINTS = {
     DISTRICTS:"/districts"
 
 
-  }
+  },
+  UNITS: {
+    UNITS: "/units",
+  },
+  BRANDS: {
+    BRANDS: "/brands",
+  },
 } as const;
