@@ -9,23 +9,32 @@ import CustomLoader from "@/app/components/main/Ui/CustomLoader/CustomLoader";
 import CustomEmpty from "@/app/components/main/Ui/CustomEmpty/CustomEmpty";
 import CreateBrand from "./CreateBrand";
 import WarningModal from "@/app/components/main/Ui/WarningModal/WarningModal";
-import { GetBrand, DeleteBrand } from "@/hooks/Brand/BrandApi";
+import {
+  GetBrand,
+  DeleteBrand,
+  ApproveBrand,
+  DenyBrand,
+} from "@/hooks/Brand/BrandApi";
 import { useNotification } from "@/app/components/providers/NotificationProvider";
 
 export default function BrandData() {
   const { data, isLoading, isError, error } = GetBrand();
   const { openNotification } = useNotification();
   const deleteMutation = DeleteBrand();
+  const approveMutation = ApproveBrand();
+  const denyMutation = DenyBrand();
 
   const [selectedBrand, setSelectedBrand] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
+  // Edit modal
   const handleEdit = (brand: any) => {
     setSelectedBrand(brand);
     setIsModalOpen(true);
   };
 
+  // Delete modal
   const handleDelete = (brand: any) => {
     setSelectedBrand(brand);
     setIsDeleteOpen(true);
@@ -48,6 +57,28 @@ export default function BrandData() {
     });
   };
 
+  const handleToggleVerify = (brand_id: string, newState: boolean) => {
+
+    const mutation = newState ? approveMutation : denyMutation;
+
+    mutation.mutate(brand_id, {
+      onSuccess: () => {
+        openNotification(
+          "success",
+          newState ? "Brand approved!" : "Brand denied!"
+        );
+      },
+      onError: (err: any) => {
+        openNotification(
+          "error",
+          err?.response?.data?.message || "Action failed"
+        );
+      },
+    });
+  };
+
+ 
+
   if (isLoading) return <CustomLoader text="Loading Brands..." />;
   if (isError)
     return (
@@ -57,6 +88,7 @@ export default function BrandData() {
     );
   if (!data || data.length === 0)
     return <CustomEmpty message="No Brands available" />;
+
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -66,12 +98,25 @@ export default function BrandData() {
             variant="white"
             onEdit={() => handleEdit(brand)}
             onDelete={() => handleDelete(brand)}
+            extraMenuActions={[
+              {
+                label: brand.is_verified
+                  ? "Mark as Denied"
+                  : "Mark as Approved",
+                onClick: () =>
+                  handleToggleVerify(brand.brand_id, !brand.is_verified),
+                color: brand.is_verified ? "red" : "green",
+                icon: <CheckCircleOutlined />,
+              },
+            ]}
           >
-            <div className="mb-4 flex justify-start">
-              <Tag icon={<CheckCircleOutlined />} color="success">
-                {brand.is_verified ? "Verified" : "Not Verified"}
+            <div className="mb-4 flex justify-start items-center gap-2">
+              <Tag color={brand.is_verified ? "success" : "default"}>
+                {brand.is_verified ? "Approved" : "Not Approved"}
               </Tag>
             </div>
+
+            {/* Brand Info */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-4 pb-4 border-b border-gray-200">
               <div>
                 <p className="text-xs font-bold text-black uppercase tracking-wide mb-1">
@@ -91,6 +136,7 @@ export default function BrandData() {
                 </p>
               </div>
             </div>
+
             <div>
               <p className="text-xs font-bold text-black uppercase tracking-wide mb-1">
                 Description
@@ -99,6 +145,7 @@ export default function BrandData() {
                 {brand.description || "No description"}
               </p>
             </div>
+
             <div className="flex justify-end pt-4 border-t border-gray-100">
               <CustomButton
                 label="View Details"

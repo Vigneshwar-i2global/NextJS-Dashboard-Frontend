@@ -2,12 +2,21 @@
 import React, { useState } from "react";
 import { EditOutlined, DeleteOutlined, MoreOutlined } from "@ant-design/icons";
 
+interface MenuAction {
+  label: string;
+  onClick: () => void;
+  color?: string;
+  icon?: React.ReactNode;
+  divider?: boolean;
+}
+
 interface CommonCardProps {
   children: React.ReactNode;
   variant?: "default" | "bordered" | "grey" | "white";
   onEdit?: () => void;
   onDelete?: () => void;
   showMenu?: boolean;
+  extraMenuActions?: MenuAction[]; // Add custom menu actions
 }
 
 const CommonCard: React.FC<CommonCardProps> = ({
@@ -16,6 +25,7 @@ const CommonCard: React.FC<CommonCardProps> = ({
   onEdit,
   onDelete,
   showMenu = true,
+  extraMenuActions = [],
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -27,9 +37,9 @@ const CommonCard: React.FC<CommonCardProps> = ({
       case "grey":
         return "bg-gray-50 border border-gray-200";
       case "white":
-        return "bg-gray-50 border border-gray-200";
+        return "bg-white border border-gray-200";
       default:
-        return "bg-gray-50 border border-gray-200";
+        return "bg-white border border-gray-200";
     }
   };
 
@@ -46,17 +56,14 @@ const CommonCard: React.FC<CommonCardProps> = ({
     >
       <div className="p-6">{children}</div>
 
-      {showMenu && (onEdit || onDelete) && (
+      {showMenu && (onEdit || onDelete || extraMenuActions.length > 0) && (
         <div className="absolute top-4 right-4 z-20">
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="p-2 "
-          >
+          <button onClick={() => setMenuOpen(!menuOpen)} className="p-2">
             <MoreOutlined className="text-lg" />
           </button>
 
           {menuOpen && (
-            <div className="absolute top-full right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden min-w-[140px]">
+            <div className="absolute top-full right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden min-w-[200px]">
               {onEdit && (
                 <button
                   onClick={() => {
@@ -75,12 +82,27 @@ const CommonCard: React.FC<CommonCardProps> = ({
                     onDelete();
                     setMenuOpen(false);
                   }}
-                  className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                  className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors border-b border-gray-100"
                 >
                   <DeleteOutlined className="text-base" />
                   <span>Delete</span>
                 </button>
               )}
+              {extraMenuActions.map((action, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => {
+                    action.onClick();
+                    setMenuOpen(false);
+                  }}
+                  className={`w-full flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors ${
+                    action.color ? `text-${action.color}-600` : "text-gray-600"
+                  }`}
+                >
+                  {action.icon}
+                  <span>{action.label}</span>
+                </button>
+              ))}
             </div>
           )}
         </div>

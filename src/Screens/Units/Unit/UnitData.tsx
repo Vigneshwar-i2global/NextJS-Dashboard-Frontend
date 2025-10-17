@@ -1,8 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import dayjs from "dayjs";
-import { EyeOutlined, CheckCircleOutlined } from "@ant-design/icons";
-import { Tag } from "antd";
+import { EyeOutlined } from "@ant-design/icons";
 import CommonCard from "@/app/components/main/CommonCard/CommonCard";
 import CustomButton from "@/app/components/main/Ui/CustomButton/CustomButton";
 import CustomLoader from "@/app/components/main/Ui/CustomLoader/CustomLoader";

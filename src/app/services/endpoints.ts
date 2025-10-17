@@ -15,6 +15,7 @@ export const ENDPOINTS = {
 
   ATTRIBUTES: {
     ATTRIBUTES: "/attributes",
+    category_attributes:"/category-attributes"
   },
   LOCATION:{
     COUNTRIES:"/countries",

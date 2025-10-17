@@ -283,3 +283,15 @@
 .css-dev-only-do-not-override-1odpy5d.ant-select-single {
   width: 100%;
 }
+
+.ant-tabs-ink-bar {
+  background-color: #9a16ca !important;  
+  height: 3px;                
+}
+
+
+
+.ant-checkbox-checked .ant-checkbox-inner{
+  background-color: #9a16ca !important; 
+  border-color: #9a16ca !important;  
+}

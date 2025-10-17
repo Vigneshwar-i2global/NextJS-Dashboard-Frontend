@@ -1,11 +1,11 @@
 "use client";
-import React, { useState } from "react";
 import {
   CreateAttribute,
   UpdateAttribute,
 } from "@/hooks/Attribute/AttributeApi";
 import { useNotification } from "@/app/components/providers/NotificationProvider";
 import FormModal, { FormField } from "@/app/components/main/Ui/CustomModal/FormModal";
+import { useState } from "react";
 
 interface AttributeModalProps {
   open: boolean;
@@ -19,18 +19,18 @@ const AttributeModal: React.FC<AttributeModalProps> = ({
   attributes,
 }) => {
   const { openNotification } = useNotification();
-  const [loading, setLoading] = React.useState(false);
-  const [errors, setErrors] = React.useState<Record<string, string>>({});
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const createMutation = CreateAttribute();
   const updateMutation = UpdateAttribute();
 
   const dataTypeOptions = [
-    { value: "1", label: "Text" },
-    { value: "2", label: "Integer" },
-    { value: "3", label: "Decimal" },
-    { value: "4", label: "Date" },
-    { value: "5", label: "Timestamp" },
+    { value: "text", label: "Text" },
+    { value: "integer", label: "Integer" },
+    { value: "decimal", label: "Decimal" },
+    { value: "date", label: "Date" },
+    { value: "timestamp", label: "Timestamp" },
   ];
 
   const fields: FormField[] = [

@@ -68,3 +68,31 @@ export const DeleteBrand = () => {
   });
 };
 
+
+export const ApproveBrand = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (brand_id: string) => {
+      const url = `${ENDPOINTS.BRANDS.BRANDS}/${brand_id}/approve`;
+      const res = await postMethod(url, {});
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["brands"] });
+    },
+  });
+};
+
+export const DenyBrand = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (brand_id: string) => {
+      const url = `${ENDPOINTS.BRANDS.BRANDS}/${brand_id}/deny`;
+      const res = await postMethod(url, {});
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["brands"] });
+    },
+  });
+};

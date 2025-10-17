@@ -8,7 +8,7 @@ import {
 import type {  MenuProps } from "antd";
 import { Button, Layout, Menu, Col, Row, Avatar, Dropdown, Typography, message } from "antd";
 import { useRouter } from "next/navigation";
-import { CircleUserRound, Package, Home, LayoutGrid  } from "lucide-react";
+import { CircleUserRound, Package  } from "lucide-react";
 import GreetingContent from "../GreetingContent/GreetingContent";
 import { clearAuthData } from "@/app/utils/auth.utils";
 import { setAuthToken } from "@/hooks/authapi";
