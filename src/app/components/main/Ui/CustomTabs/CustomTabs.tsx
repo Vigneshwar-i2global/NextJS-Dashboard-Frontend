@@ -24,12 +24,10 @@ const CustomTabs: React.FC<CustomTabsProps> = ({
     return <div>No tabs available</div>;
   }
 
-  // current active tab content
   const activeTab = tabs.find((tab) => tab?.key === activeKey);
 
   return (
     <div>
-      {/* Ant Design Tab headers */}
       <Tabs
         activeKey={activeKey}
         onChange={(key) => {
@@ -40,7 +38,6 @@ const CustomTabs: React.FC<CustomTabsProps> = ({
         className="custom-tabs"
       />
 
-      {/* Animated Tab Content */}
       <div className="mt-4">
         <AnimatePresence mode="wait">
           <motion.div

@@ -73,6 +73,7 @@ const CategoryData = () => {
               onEdit={() => handleEdit(category)}
               onDelete={() => handleDelete(category)}
             >
+              
               <div className="mb-4 flex justify-between items-start">
                 <span className="px-3 py-1.5 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold">
                   Display Order: {category.display_order}
@@ -81,10 +82,10 @@ const CategoryData = () => {
 
               <div className="mb-4 pb-4 border-b border-gray-200 grid grid-cols-2 gap-6">
                 <div>
-                  <p className="text-xs font-bold text-black uppercase tracking-wide mb-1">
+                  <p className="text-xs font-bold text-black uppercase tracking-wide mb-1 ">
                     Category Name
                   </p>
-                  <p className="text-lg text-gray-600">{category.name}</p>
+                  <p className="text-lg text-gray-600 whitespace-normal break-words">{category.name}</p>
                 </div>
 
                 <div>
@@ -101,8 +102,8 @@ const CategoryData = () => {
                 <p className="text-xs font-bold text-black uppercase tracking-wide mb-1">
                   Description
                 </p>
-                <p className="text-gray-600 text-sm">
-                  {category.description || "No description provided."}
+                <p className="text-gray-600 text-sm whitespace-normal break-words">
+                {category.description || "No description provided."}
                 </p>
               </div>
 

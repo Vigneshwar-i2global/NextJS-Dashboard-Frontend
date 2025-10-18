@@ -93,7 +93,7 @@ const SubCategoriesData: React.FC<SubCategoriesDataProps> = ({ slug }) => {
                   <p className="text-xs font-bold text-black uppercase tracking-wide mb-1">
                     Subcategory Name
                   </p>
-                  <p className="text-lg text-gray-600">{category.name}</p>
+                  <p className="text-lg text-gray-600 whitespace-normal break-words">{category.name}</p>
                 </div>
 
                 <div>
@@ -110,7 +110,7 @@ const SubCategoriesData: React.FC<SubCategoriesDataProps> = ({ slug }) => {
                 <p className="text-xs font-bold text-black uppercase tracking-wide mb-1">
                   Description
                 </p>
-                <p className="text-gray-600 text-sm">
+                <p className="text-gray-600 text-sm whitespace-normal break-words">
                   {category.description || "No description provided."}
                 </p>
               </div>

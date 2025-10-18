@@ -21,24 +21,24 @@ const CategoryModal: React.FC<CategoryModalProps> = ({ open, onClose, category }
   const fields: FormField[] = [
     {
       name: "name",
-      label: "Name",
+      label: "Category Name",
       type: "text",
-      placeholder: "Enter category name",
+      placeholder: "Enter Category Name",
       required: true,
     },
     {
       name: "description",
-      label: "Description",
+      label: "Category Description",
       type: "textarea",
-      placeholder: "Enter description",
+      placeholder: "Enter Category Description",
       rows: 5,
       required: true,
     },
     {
       name: "displayOrder",
-      label: "Display Order",
+      label: "Category Display Order",
       type: "number",
-      placeholder: "Enter display order",
+      placeholder: "Enter Category Display Order",
       required: true,
       min: 1,
     },
@@ -81,6 +81,8 @@ const CategoryModal: React.FC<CategoryModalProps> = ({ open, onClose, category }
         res = await createMutation.mutateAsync(values);
       }
 
+      console.log(res,'res');
+      
       openNotification(
         "success",
         res?.message || (category ? "Category updated!" : "Category created!")

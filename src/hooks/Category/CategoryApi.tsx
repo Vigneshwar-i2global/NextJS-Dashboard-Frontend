@@ -24,7 +24,7 @@ export const CreateCategory = () => {
     mutationKey: ["createCategory"],
     mutationFn: async (payload: Record<string, any>) => {
       const url = ENDPOINTS.CATEGORY.CATEGORIES;
-      const res = await postMethod(url, payload);
+      const res = await postMethod(url, payload);      
       return res.data;
     },
     onSuccess: () => {

@@ -65,7 +65,7 @@ export default function MappingData() {
                 <p className="text-xs font-bold text-black uppercase tracking-wide mb-1">
                   Category ID
                 </p>
-                <p className="text-sm text-gray-600 line-clamp-1">
+                <p className="text-sm text-gray-600 break-words whitespace-nowwrap">
                   {mapping.category_id}
                 </p>
               </div>
@@ -73,7 +73,7 @@ export default function MappingData() {
                 <p className="text-xs font-bold text-black uppercase tracking-wide mb-1">
                   Attribute ID
                 </p>
-                <p className="text-sm text-gray-600 line-clamp-1">
+                <p className="text-sm text-gray-600 break-words whitespace-nowwrap">
                   {mapping.attribute_id}
                 </p>
               </div>

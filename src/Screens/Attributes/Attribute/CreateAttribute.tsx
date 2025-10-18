@@ -36,14 +36,14 @@ const AttributeModal: React.FC<AttributeModalProps> = ({
   const fields: FormField[] = [
     {
       name: "name",
-      label: "Name",
+      label: "Attribute Name",
       type: "text",
       placeholder: "Enter Attribute name",
       required: true,
     },
     {
       name: "description",
-      label: "Description",
+      label: "Attribute Description",
       type: "textarea",
       placeholder: "Enter description",
       rows: 5,
@@ -51,7 +51,7 @@ const AttributeModal: React.FC<AttributeModalProps> = ({
     },
     {
       name: "data_type",
-      label: "Data Type",
+      label: "Attribute Data Type",
       type: "select",
       placeholder: "Search to Select",
       required: true,
@@ -59,13 +59,13 @@ const AttributeModal: React.FC<AttributeModalProps> = ({
     },
     {
       name: "is_active",
-      label: "Active",
+      label: "Mark As Active",
       type: "checkbox",
       initialValue: false,
     },
     {
       name: "is_required",
-      label: "Required",
+      label: "Mark As Required",
       type: "checkbox",
       initialValue: false,
     },

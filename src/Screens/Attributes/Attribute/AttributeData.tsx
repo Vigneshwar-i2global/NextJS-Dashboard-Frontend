@@ -78,7 +78,7 @@ export default function AttributeData() {
                 <p className="text-xs font-bold text-black uppercase tracking-wide mb-1">
                   Attribute Name
                 </p>
-                <p className="text-sm text-gray-600 line-clamp-1">
+                <p className="text-sm text-gray-600 whitespace-normal break-words">
                   {attribute.name}
                 </p>
               </div>
@@ -106,7 +106,7 @@ export default function AttributeData() {
               <p className="text-xs font-bold text-black uppercase tracking-wide mb-1">
                 Description
               </p>
-              <p className="text-sm text-gray-600 line-clamp-2">
+              <p className="text-sm text-gray-600 whitespace-normal break-words">
                 {attribute.description || "No description"}
               </p>
             </div>

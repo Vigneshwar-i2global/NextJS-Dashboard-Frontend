@@ -23,16 +23,16 @@ const BrandModal: React.FC<BrandModalProps> = ({ open, onClose, brands }) => {
   const fields: FormField[] = [
     {
       name: "name",
-      label: "Name",
+      label: "Brand Name",
       type: "text",
       placeholder: "Enter Brand name",
       required: true,
     },
     {
       name: "description",
-      label: "Description",
+      label: "Enter Description",
       type: "textarea",
-      placeholder: "Enter description",
+      placeholder: "Enter Brand description",
       rows: 5,
       required: true,
     },

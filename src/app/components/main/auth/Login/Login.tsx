@@ -35,7 +35,8 @@ const Login: React.FC = () => {
       } else {
         openNotification("error", "Failed to send OTP. Please try again.");
       }
-    } catch (error) {
+    } catch (error ) {
+      
       openNotification("error", "Failed to send OTP. Please try again.");
     } finally {
       setLoading(false);
@@ -46,7 +47,7 @@ const Login: React.FC = () => {
     try {
       setLoading(true);
       const response = await verifyOtpApi(mobileNumber, otp, "seller");
-
+  
       if (response.status === "success" && response.data) {
         openNotification("success", response.message);
         saveAuthToken(response.data.token);
@@ -57,15 +58,21 @@ const Login: React.FC = () => {
           phoneNumber: mobileNumber,
         });
         router.push("/admin/dashboard");
-      } else {
-        openNotification("error", "OTP verification failed. Please try again.");
       }
-    } catch (error) {
-      openNotification("error", "Invalid OTP. Please try again.");
+    } catch (error: any) {
+      console.log(error, "error");
+  
+      const errorMessage =
+        error?.response?.data?.error?.message ||
+        error?.response?.data?.message ||
+        "Something went wrong. Please try again.";
+  
+      openNotification("error", errorMessage);
     } finally {
       setLoading(false);
     }
   };
+  
 
   const handleResendOtp = async () => {
     try {

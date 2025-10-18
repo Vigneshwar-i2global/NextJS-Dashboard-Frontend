@@ -1,9 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import dayjs from "dayjs";
-import { EyeOutlined } from "@ant-design/icons";
 import CommonCard from "@/app/components/main/CommonCard/CommonCard";
-import CustomButton from "@/app/components/main/Ui/CustomButton/CustomButton";
 import CustomLoader from "@/app/components/main/Ui/CustomLoader/CustomLoader";
 import CustomEmpty from "@/app/components/main/Ui/CustomEmpty/CustomEmpty";
 import CreateUnit from "./CreateUnit";
@@ -71,7 +69,7 @@ export default function UnitData() {
                 <p className="text-xs font-bold text-black uppercase tracking-wide mb-1">
                   Unit Name
                 </p>
-                <p className="text-sm text-gray-600 line-clamp-1">
+                <p className="text-sm text-gray-600 break-words whitespace-nowwrap">
                   {unit.name}
                 </p>
               </div>
@@ -89,17 +87,11 @@ export default function UnitData() {
               <p className="text-xs font-bold text-black uppercase tracking-wide mb-1">
                 Description
               </p>
-              <p className="text-sm text-gray-600 line-clamp-2">
+              <p className="text-sm text-gray-600 break-words whitespace-nowwrap">
                 {unit.description || "No description"}
               </p>
             </div>
-            <div className="flex justify-end pt-4 border-t border-gray-100">
-              <CustomButton
-                label="View Details"
-                icon={<EyeOutlined />}
-                className="!text-sm"
-              />
-            </div>
+         
           </CommonCard>
         ))}
       </div>

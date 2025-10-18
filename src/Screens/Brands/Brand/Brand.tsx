@@ -11,7 +11,7 @@ export default function Brand() {
       <div>
         <div className="flex justify-end">
           <CustomButton
-            label="Add Unit"
+            label="Add Brand"
             icon={<Plus />}
             onClick={() => setIsModalOpen(true)}
           />

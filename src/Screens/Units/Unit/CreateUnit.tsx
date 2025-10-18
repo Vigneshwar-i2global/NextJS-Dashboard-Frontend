@@ -23,16 +23,16 @@ const UnitModal: React.FC<UnitModalProps> = ({ open, onClose, units }) => {
   const fields: FormField[] = [
     {
       name: "name",
-      label: "Name",
+      label: "Unit Name",
       type: "text",
       placeholder: "Enter Unit name",
       required: true,
     },
     {
       name: "description",
-      label: "Description",
+      label: "Unit Description",
       type: "textarea",
-      placeholder: "Enter description",
+      placeholder: "Enter Unit description",
       rows: 5,
       required: true,
     },

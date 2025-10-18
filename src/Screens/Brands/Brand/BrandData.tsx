@@ -1,10 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import dayjs from "dayjs";
-import { EyeOutlined, CheckCircleOutlined } from "@ant-design/icons";
+import {  CheckCircleOutlined } from "@ant-design/icons";
 import { Tag } from "antd";
 import CommonCard from "@/app/components/main/CommonCard/CommonCard";
-import CustomButton from "@/app/components/main/Ui/CustomButton/CustomButton";
 import CustomLoader from "@/app/components/main/Ui/CustomLoader/CustomLoader";
 import CustomEmpty from "@/app/components/main/Ui/CustomEmpty/CustomEmpty";
 import CreateBrand from "./CreateBrand";
@@ -116,13 +115,12 @@ export default function BrandData() {
               </Tag>
             </div>
 
-            {/* Brand Info */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-4 pb-4 border-b border-gray-200">
               <div>
                 <p className="text-xs font-bold text-black uppercase tracking-wide mb-1">
                   Brand Name
                 </p>
-                <p className="text-sm text-gray-600 line-clamp-1">
+                <p className="text-sm text-gray-600 break-words whitespace-nowwrap">
                   {brand.name}
                 </p>
               </div>
@@ -141,18 +139,12 @@ export default function BrandData() {
               <p className="text-xs font-bold text-black uppercase tracking-wide mb-1">
                 Description
               </p>
-              <p className="text-sm text-gray-600 line-clamp-2">
+              <p className="text-sm text-gray-600 break-words whitespace-nowwrap">
                 {brand.description || "No description"}
               </p>
             </div>
 
-            <div className="flex justify-end pt-4 border-t border-gray-100">
-              <CustomButton
-                label="View Details"
-                icon={<EyeOutlined />}
-                className="!text-sm"
-              />
-            </div>
+            
           </CommonCard>
         ))}
       </div>
